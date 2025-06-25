@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'home_app/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
+
+{% block title %}
+Повідомлення
+{% endblock %}
+
+{% block window %}
+<div class="window-back">
+    <form class="window" method="post" enctype="multipart/form-data">
+        <div class="window-main-content">
+            {% csrf_token %}
+            <button id="close-btn" type="button"><img src="{% static 'home_app/img/close.png' %}"></button>
+            <div class="center"><h1>Нова група</h1></div>
+            <div class="window-content">
+                <div class="center">
+                    <div class="search-input-container">
+                        <img src="{% static 'img/search.svg' %}">
+                        {{ form.as_p }}
+                    </div>
+                </div>
+            <p id="selected-users-counter">Вибрано: 0</p>
+            <div class="select-contacts-container">
+                <div id="all-contacts-list" class="filter-letter-container">
+                    <p class="filter-letter">Всі</p>
+                    <div>
+                        {% for friend in friends %}
+                        <a href="{% url 'personal' friend.pk %}">
+                            <div id="select-contact-{{ friend.pk }}" class="select-contact">
+                                <div class="select-user-img-container">
+                                    {% if friend.image %}
+                                        <img class="select-contact-img" src="{{ friend.image.url }}">
+                                    {% else %}
+                                        <img src="{% static 'img/Avatar.png' %}">
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <p class="select-contact-name">{{ friend.user.username }}</p>
+                                    <input class="select-user-checkbox" type="checkbox">
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="bottom right">
+                <div></div>
+                <div>
+                    <button id="cancel-btn" class="outlined" type="button">Скасувати</button>
+                    <button id="next-btn" class="filled" type="button">Далі</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block left %}
+    <div>
+        <button class="filled" id="create-new-group-btn"><img src="{% static 'img/create.svg' %}">Створити груповий чат</button>
+    </div>
+    <div class="contacts-container">
+        <div class="header">
+            <div class="center"><img src="{% static 'img/people.svg' %}"><h2>Контакти</h2></div>
+        </div>
+        <div class="header">
+            <div class="search-input-container">
+                <img src="{% static 'img/search.svg' %}">
+                {{ form.as_p }}
+            </div>
+        </div>
+        <div class="contacts-list column">
+            {% for friend in friends %}
+                <a class="contact" href="{% url 'to_personal' user_pk friend.user.pk %}" data-id="{{ friend.pk }}">
+                    {% if friend.image %}
+                        <img src="{{ friend.image.url }}">
+                    {% else %}
+                        <img src="{% static 'img/Avatar.png' %}">
+                    {% endif %}
+                    <p>{{ friend.user.username }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block right %}
+    <div class="center">
+        {% block center %}
+            <div class="chat-container center">
+                <h2>Почніть нове спілкування</h2>
+                <p>Оберіть контакт зі списку ліворуч<br>або створіть групу, щоб почати спілкування</p>
+            </div>
+        {% endblock %}
+    </div>
+
+    <div class="right">
+        {% block right-side %}
+            <div class="column side-panel">
+            <div class="messages-container">
+            <div class="header">
+                <div class="center"><img src="{% static 'img/chat.png' %}"><h2>Повідомлення</h2></div>
+                <p>Дивитись всі</p>
+            </div>
+            <div id="messages-bottom-content">
+                {% for chat in chats %}
+                <div class="message">
+                    <div class="user-message-container center">
+                        <img src="{% static 'img/john.jpg' %}">
+                        <div class="user-status"></div>
+                    </div>
+                    <div class="column">
+                        <p>{{ chat.name }}</p>
+                        <p>Привіт! Як справи ?</p>
+                    </div>
+                </div>
+                {% empty %}
+                    <div class="center">
+                        Нажаль, поки що вам ніхто не написав
+                    </div>
+                {% endfor %}
+                <!--<div class="message">
+                    <div class="user-message-container center">
+                        <img src="{% static 'img/john.jpg' %}">
+                        <div class="user-status"></div>
+                    </div>
+                    <div class="column">
+                        <p>John Cooper</p>
+                        <p>Привіт! Як справи ?</p>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        <div class="groups-container">
+            <div class="header">
+                <div class="center"><img src="{% static 'img/chat.png' %}"><h2>Групові чати</h2></div>
+                <p>Дивитись всі</p>
+            </div>
+            <div id="groups-bottom-content">
+                {% for group in groups %}
+                    <a class="message" href="{% url 'group' group.pk %}">
+                        <div class="group-message-container center">
+                            {% if group.avatar %}
+                                <img src="{{ group.avatar.url }}">
+                            {% else %}
+                                NP
+                            {% endif %}
+                        </div>
+                        <div class="column">
+                            <p>{{ group.name }}</p>
+                            <p>{{ group.last_message|default:"(немає повідомлень)" }}</p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <!--<script src="{% static 'js/chat.js' %}"></script>-->
+    <script src="{% static 'js/group.js' %}"></script>
+    <script src="{% static 'js/socket.js' %}"></script>
+{% endblock %}

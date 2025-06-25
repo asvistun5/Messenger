@@ -1,0 +1,1 @@
+$('#messages-container-scroll').scrollTop($('#messages-container-scroll')[0].scrollHeight);

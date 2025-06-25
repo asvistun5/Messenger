@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'login/css/login.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <div class="content">
+        <div class="switcher">
+            <div class="tab inactive-tab">
+               <a href="{% url 'reg' %}">Реєстрація</a>
+            </div>
+            <div class="tab  active-tab">
+               <p>Авторизація</p>
+               <div class="active-tab-line"></div>
+            </div>
+        </div>
+        {% if form %}
+        <h1>Раді тебе знову бачити!</h1>
+        <form class="reg-form" id="form" method="post">
+            {% csrf_token %}
+            <div class="reg-form-main" >
+                {{ form.as_p }}
+                {{ form.errors }}
+            </div>
+            <button name="submitform" value="mainform" id="submitForm" type="submit">Увійти</button>
+         </form>
+        {% endif %}
+        {% if codeform %}
+        <div class="popup" >
+            <form action="" method="post" >
+                {% csrf_token %}
+                <div>
+                <input type="text" placeholder="0" name="num1" class="code-input" maxlength="1">
+                <input type="text" placeholder="0" name="num2" class="code-input" maxlength="1">
+                <input type="text" placeholder="0" name="num3" class="code-input" maxlength="1">
+                <input type="text" placeholder="0" name="num4" class="code-input" maxlength="1">
+                <input type="text" placeholder="0" name="num5" class="code-input" maxlength="1">
+                </div>
+                <button name="submitform" value="codeform" id="submitForm" type="submit">Підтвердити</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    <img class="back-img" src="{% static 'reg/img/background-mac-iphone.png' %}">
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{% static 'login/js/login.js' %}" ></script>
+
+{% endblock %}

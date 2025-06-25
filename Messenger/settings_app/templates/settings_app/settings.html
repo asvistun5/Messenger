@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Cторінка налаштувань
+{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<link rel="stylesheet" href="{% static 'home_app/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+{% endblock %}
+
+{% block left %}
+
+        <div class="left-links">
+            <a class="link" href="{% url 'settings' %}" style="text-decoration: underline !important; text-underline-offset: 6px;"><p>Особиста інформація</p></a>
+            <a class="link" href="{% url 'albums' %}"><p style="color: #81818D !important;">Альбоми</p></a>
+        </div>
+{% endblock %}
+
+        {% block right %}
+            <div class="card">
+                <div class="center header">
+                    <h2>Картка профілю</h2>
+                    <input type="file" accept="image/*" id="user-photo-input" class="file-input">
+                    <button class="edit-button" id="user-photo-edit-btn"><img src="{% static 'img/pencil.svg' %}">Редагувати інформацію</button>
+                </div>
+                <div class="profile-card">
+                    {% if profile.image %}
+                        <img class="user-profile-photo" src="{{ profile.image.url }}">
+                    {% else %}
+                        <img class="user-profile-photo" src="{% static 'home_app/img/UserPhoto.png' %}">
+                    {% endif %}
+                    <h3>{{ profile.user.username }}</h3>
+                    <p>@{{ profile.user.username }}</p>
+                </div>
+            </div>
+        <form method="post" action="{% url 'profile' %}">
+            {% csrf_token %}
+            <div class="card">
+                <div class="center header">
+                    <h2>Особиста інформація</h2>
+                    <button type="button" class="edit-button" id="personal-info-edit-btn"><img src="{% static 'img/pencil.svg' %}">Редагувати інформацію</button>
+                </div>
+                <div class="info-group">
+                    <label>Ім'я</label>
+                    <input type="text" name="first_name" value="{{ profile.user.username }}" disabled>
+                    <img class="show_img" src="{% static 'home_app/img/eye.png' %}">
+            
+                    <label>Прізвище</label>
+                    <input type="text" name="last_name" value="{{ user.last_name }}" disabled>
+                    <img class="show_img" src="{% static 'home_app/img/eye.png' %}">
+            
+                    <label>Дата народження</label>
+                    <input type="date" name="birth_date" value="{{ profile.birth_date|default_if_none:'' }}" disabled>
+                    <img class="show_img" src="{% static 'home_app/img/eye.png' %}">
+            
+                    <label>Електронна адреса</label>
+                    <input type="email" name="email" value="{{ user.email }}" disabled>
+                    <img class="show_img" src="{% static 'home_app/img/eye.png' %}">
+            
+                    <label>Пароль</label>
+                    <input type="password" name="password" value="{{ profile.user.password }}" disabled>
+                    <img class="show_img" src="{% static 'home_app/img/eye.png' %}">
+                </div>
+            </div>
+        </form>
+        
+            <div class="card">
+                <div class="center header">
+                    <h2>Варіанти підпису</h2>
+                    <button id="autograph-edit-btn" class="edit-button"><img src="{% static 'img/pencil.svg' %}">Редагувати інформацію</button>
+                </div>
+                <div class="signature-options">
+                    <label><input type="checkbox" checked> Ім’я та прізвище:</label>
+                    <h3>{{ profile.user.get_full_name }}</h3>
+                    <label><input type="checkbox"> Мій електронний підпис:</label>
+                    <input type="file" id="autograph-input" class="file-input">
+                    <img id="user-autograph" class="user-profile-photo" src="{% static 'home_app/img/sign.png' %}"/>
+                </div>
+            </div>
+    {% endblock %}
+
+
+{% block scripts %}
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/settings.js' %}"></script>
+{% endblock %}

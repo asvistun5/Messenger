@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Головна сторінка
+{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'home_app/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/create.css' %}">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+{% endblock %}
+
+{% block window %}
+
+<div class="window-back">
+    <form class="window" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button id="close-btn" type="button"><img src="{% static 'home_app/img/close.png' %}"></button>
+        <h1>Створення публікації</h1>
+        <div class="window-content">
+            <div class="window-input">
+                <h3>Назва публікації</h3>
+                <input type="text" id="post-title" name="title" placeholder="Наприклад: Природа, книга і спокій 🌿" required>
+            </div>
+            <div class="window-input">
+                <h3>Тема публікації</h3>
+                <input type="text" id="post-topic" name ='topic' placeholder="Тема публікації" required>
+            </div>
+            <div class="tags-container">
+                <button type="button" class="tag">#відпочинок</button>
+                <button type="button" class="tag">#натхнення</button>
+                <button type="button" class="tag">#життя</button>
+                <button type="button" class="tag">#природа</button>
+                <button type="button" class="tag">#читання</button>
+                <button type="button" class="tag">#спокій</button>
+                <button type="button" class="tag">#гармонія</button>
+                <img id="add-new-tag-btn" class="round-add-btn" src="{% static 'img/upload.svg' %}">
+            </div>
+            <div class="window-input">
+                <textarea id="post-description" contenteditable="true" name="description">
+                </textarea>
+            </div>
+            <div class="column">
+                <div class="window-input social-link-field">
+                    <h3>Посилання</h3>
+                    <input type="text" id="post-link" name='link' placeholder="Посилання">
+                </div>
+                <img id="add-new-link-btn" class="round-add-btn" src="{% static 'img/upload.svg' %}">
+            </div>
+        </div>
+        <div class="imgs-container row">
+            <div class="img-preview-container" style="display: none;"><img src="" class="img-preview" style="display: none;" alt="preview"><button class="img-delete-btn" style="display: none;" type="button"></button></div>
+            <input type="file" id="post-img" name="img" style="display: none;" multiple>
+        </div>
+        <div class="bottom">
+            <button class="fast-message-content-button" id="post-img-btn" type="button"><img src="{% static 'home_app/img/picture.png' %}"></button>
+            <button class="fast-message-content-button" type="button"><img src="{% static 'home_app/img/emodji.png' %}"></button>
+            <button id="publish-btn" class="filled" type="submit" data-url="{% url 'create' %}">Публікація<img src="{% static 'img/send.png' %}"></button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+
+{% if modal %}
+<div class="modal-overlay">
+    <form method="post" action="{% url 'complete_profile' %}" class="modal-form">
+        {% csrf_token %}
+        <h2 class="modal-title">Додай деталі про себе</h2>
+
+        <label for="first_name">Ім’я</label>
+        <input name="first_name" placeholder="Введіть Ваше ім’я" required>
+
+        <label for="last_name">Прізвище</label>
+        <input name="last_name" placeholder="Введіть Ваше прізвище" required>
+
+        <label for="username_custom">Ім’я користувача</label>
+        <input name="username_custom" placeholder="@" required>
+
+        <p class="suggestion-text">
+            Або оберіть:
+            <span class="suggestion-link">Запропоновані варіанти відповідно до Ім’я та Прізвища</span>
+        </p>
+        <button type="submit" class="submit-btn">Продовжити</button>
+    </form>
+</div>
+{% endif %}
+
+
+{% block right %}
+        {% if posts %}
+        <div class="fast-message">
+            <div class="fast-message-content">
+                <input class="fast-message-content-input" type="text" placeholder="Про що ти зараз думаєш?">
+                <div class="fast-message-content-buttons">
+                    <button class="fast-message-content-button" type="button"><img src="{% static 'home_app/img/picture.png' %}"></button>
+                    <button class="fast-message-content-button" type="button"><img src="{% static 'home_app/img/emodji.png' %}"></button>
+                    <button class="fast-message-content-button-publish" type="button">
+                        <p>Перейти до оформлення</p>
+                        <img src="{% static 'home_app/img/PlaneR.png' %}">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column-reverse;">
+        {% for post in posts %}
+        
+        <div class="social-post">
+            <div class="social-post-user-info">
+                <div class="social-post-inner-user-info">
+                    <div class="social-post-inner-user-info-total">
+                        <a href="{% url 'profile' post.user.id %}">
+                            {% if post.user.image %}
+                                <img src="{{ post.user.image.url }}">
+                            {% else %}
+                                <img src="{% static 'home_app/img/UserPhoto.png' %}">
+                            {% endif %}
+                        </a>
+                        <p>{{ post.user }}</p>
+                    </div>
+                    <div class="social-post-inner-user-info-sign">
+                        <img src="{% static 'home_app/img/sign.png' %}">
+                    </div>
+                </div>
+                <button class="social-post-dots" data-post-id="{{ post.id }}">
+                    <img src="{% static 'img/dots.png' %}">
+                </button>
+            </div>
+            <div class="social-post-info">
+                <div class="social-post-info-text" data-post-id="{{ post.id }}">
+                    <textarea readonly class="social-post-text-content" data-post-id="{{ post.id }}" disabled>
+{{ post.title }}
+{{ post.description }}
+#{{ post.tags }}
+{{ post.link }}
+                    </textarea>
+                </div>
+                <div class="social-post-info-photos">
+                    <div class="social-post-info-photos-group-1">
+                        {% if post.images.all %}
+                            {% for image in post.images.all %}
+                                <p><img src="{{ image.image.url }}" alt="Картинка публікації"></p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="social-post-info-stats">
+                    <div class="social-post-info-stat-likes">
+                        <img src="{% static 'home_app/img/like.png' %}">
+                        <p>{{ post.likes }} Вподобань</p>
+                    </div>
+                    <div class="social-post-info-stat-views">
+                        <img src="{% static 'home_app/img/eye.png' %}">
+                        <p>{{ post.views }} Переглядів</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+        {% else %}
+        <script>document.body.style = 'overflow-y: hidden;'</script>
+            <div class="fast-message">
+                <div class="fast-message-content">
+                    <input class="fast-message-content-input" type="text" placeholder="Про що ти зараз думаєш?">
+                    <div class="fast-message-content-buttons">
+                        <button class="fast-message-content-button" type="button"><img src="{% static 'home_app/img/picture.png' %}"></button>
+                        <button class="fast-message-content-button" type="button"><img src="{% static 'home_app/img/emodji.png' %}"></button>
+                        <button class="fast-message-content-button-publish" type="button">
+                            <p>Перейти до оформлення</p>
+                            <img src="{% static 'home_app/img/PlaneR.png' %}">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/homeCreate.js' %}"></script>
+<script src="{% static 'js/create.js' %}"></script>
+{% endblock %}

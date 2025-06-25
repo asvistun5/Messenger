@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Cторінка альбомів
+{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+<link rel="stylesheet" href="{% static 'home_app/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+{% endblock %}
+
+{% block window %}
+    <div class="window-back">
+        <form class="window" method="post" enctype="multipart/form-data">
+        <div>
+            <button id="close-btn" type="button"><img src="{% static 'home_app/img/close.png' %}"></button>
+            <h1>Створити альбом</h1>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="reset" class="outlined">Скасувати</button>
+            <button type="submit" class="filled">Зберегти</button>
+        </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block left %}
+    <div class="left-links">
+        <a class="link" href="{% url 'settings' %}" style="color: #81818D !important;"><p>Особиста інформація</p></a>
+        <a class="link" href="{% url 'albums' %}"><p style="text-decoration: underline !important; text-underline-offset: 6px;">Альбоми</p></a>
+    </div>
+{% endblock %}
+
+
+{% block right %}
+        {% block container %}
+        <div class="container">
+            <div class="card">
+                <div class="center header">
+                    <h2>Мої фото</h2>
+                    <button class="edit-button" id="edit-my-photos-button"><img src="{% static 'home_app/img/picture.png' %}">Додати фото</button>
+                </div>
+                <div class="my-photos-collection">
+                    <div class="preview-photo">
+                        <img src="{{ image }}">
+                        <div class="center">
+                            <button id="hide-photo-btn" class="center"><img src="{% static 'img/eye.svg' %}"></button>
+                            <button id="delete-photo-btn" class="center"><img src="{% static 'img/bin.svg' %}"></button>
+                        </div>
+                    </div>
+                    <input type="file" id="collection-img" name="img" style="display: none;">
+                </div>
+            </div>
+            <div class="card">
+                <div class="center header">
+                    <p>Немає ще жодного альбому</p>
+                    <button class="edit-button" id="create-new-album-button"><img src="{% static 'img/plus.svg' %}">Створити альбом</button>
+                </div>
+            </div>
+            <div class="card column album">
+                <div class="center header">
+                    <h3>Настрій</h3>
+                    <div class="center" style="gap: 24px;">
+                        <button id="album-visibility-btn" class="center"><img src="{% static 'img/eye.svg' %}"></button>
+                        <button id="album-settings-btn" class="center"><img src="{% static 'img/dots.png' %}"></button>
+                    </div>
+                </div>
+                <div class="row"><p>Природа</p><span class="album-year">2025 рік</span></div>
+                <hr color="#CDCED2">
+                <p>Фотографії</p>
+                <div class="imgs-container row">
+                    <input type="file" id="album-img" name="img" class="upload-img-space">
+                    <div><img src="" id="img-preview-1" style="display: none;" alt="preview"><button id="img-delete-btn" style="display: none;" type="button"></button></div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/albums.js' %}"></script>
+{% endblock %}
