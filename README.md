@@ -87,8 +87,10 @@ python manage.py runserver
 python3 manage.py runserver
 ```
 
-## Conclusion
-<span style="color: gray; font-size: 20px;">| Підсумок:</span>
+<h1>Conclusion <span style="color: gray; font-size: 22px;">| Підсумок: </span></h1>
+
 #### Thanks to this project, we got a lot of experience, learned how to write in the Django framework, and improved our skills in writing HTML and CSS files. We also improved our work with GitHub, and learned how to work on our own branch. 
+
 ---
+
 #### Завдяки цьому проекту ми отримали великий опит, навчилися написанню у фреймворку Django та покращили навички написання HTML та CSS файлів. Також покращили працю з GitHub, и навчилися працювати кожен над своею віткою.
