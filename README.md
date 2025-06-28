@@ -1,7 +1,6 @@
-# Project "Messanger — Social network" 
-<span style="color: gray; font-size: 24px;">| Проєкт "Messanger — Соціальна мережа"</span>
+<h1>Project "Messanger — Social network" <span style="color: gray; font-size: 24px;">| Проєкт "Messanger — Соціальна мережа"</span></h1>
 
-![Image](http://bit.ly/4epMEbb)
+<img src="http://bit.ly/4epMEbb" style="width: 700px; height: 325px; border-radius: 12px; webkit-user-drag: none; user-select: none;">
 
 # Purpose of the Project 
 <span style="color: gray; font-size: 22px;">| Мета створення проєкту</span>
